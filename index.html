@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Formulário — Power Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#0f1115;
+      --muted:#6b7280;
+      --line:#e6e8ec;
+      --line-strong:#d1d5db;
+      --brand:#111827;
+      --accent:#c8a24a;          /* dourado suave */
+      --accent-2:#e7c974;
+      --focus:rgba(200,162,74,.18);
+      --radius:16px;
+      --field-h:64px;
+      --maxw:560px;
+      --font:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      background:var(--bg);
+      color:var(--ink);
+      font-family:var(--font);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      min-height:100vh;
+      min-height:100dvh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:48px 0;
+    }
+    .wrap{
+      width:100%;
+      max-width:var(--maxw);
+      margin:0 auto;
+      padding:0 24px;
+    }
+    /* Progress */
+    .progress{
+      position:fixed;top:0;left:0;height:4px;width:0%;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      transition:width .45s cubic-bezier(.22,.61,.36,1);
+      z-index:50;
+    }
+    /* Header */
+    .brand{
+      display:flex;align-items:center;gap:12px;margin-bottom:40px;
+    }
+    .brand .logo{
+      width:44px;height:44px;border-radius:12px;
+      background:radial-gradient(120% 120% at 30% 20%,var(--accent-2),var(--accent));
+      display:grid;place-items:center;color:#1a1400;font-weight:800;font-size:18px;
+      box-shadow:0 6px 20px rgba(200,162,74,.35);
+    }
+    .brand small{display:block;color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+    .brand strong{font-size:16px;font-weight:700}
+
+    h1{font-size:30px;line-height:1.15;letter-spacing:-.02em;margin:0 0 10px}
+    .form-title{font-size:21px;line-height:1.25;letter-spacing:-.02em;margin:0 0 32px;text-align:center;font-weight:700;white-space:nowrap}
+    .form-title .mob-br{display:none}
+    @media (max-width:480px){
+      .form-title{font-size:23px;margin-bottom:26px;white-space:normal}
+      .form-title .mob-br{display:inline}
+    }
+    .sub{color:var(--muted);font-size:16px;margin:0 0 36px}
+
+    form{display:flex;flex-direction:column;gap:26px}
+    .field{display:flex;flex-direction:column;gap:10px;animation:rise .5s both;position:relative}
+    /* eleva o campo do telefone acima dos demais quando o dropdown está aberto */
+    .field.ddi-open{z-index:9999}
+    .field:nth-child(1){animation-delay:.05s}
+    .field:nth-child(2){animation-delay:.12s}
+    .field:nth-child(3){animation-delay:.19s}
+    .field:nth-child(4){animation-delay:.26s}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+    label.q{font-size:15px;font-weight:600;letter-spacing:-.01em}
+    label.q .num{color:var(--accent);font-weight:700;margin-right:8px}
+    .hint{font-size:13px;color:var(--muted);margin-top:-2px}
+
+    .input,.tel{
+      height:var(--field-h);
+      border:1.5px solid var(--line);
+      border-radius:var(--radius);
+      background:#fff;
+      display:flex;align-items:center;
+      transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+    .input input{
+      width:100%;height:100%;border:0;outline:0;background:transparent;
+      font-size:18px;color:var(--ink);padding:0 20px;font-family:inherit;
+    }
+    .input input::placeholder{color:#aab0ba}
+
+    /* Telefone com DDI */
+    .tel{padding-left:6px}
+    .ddi{
+      position:relative;flex:0 0 auto;height:calc(var(--field-h) - 12px);
+      margin:6px 0;padding-left:6px;
+    }
+    .ddi-btn{
+      height:100%;display:flex;align-items:center;gap:9px;
+      background:#f6f7f9;border:0;border-radius:12px;
+      padding:0 14px;cursor:pointer;font-family:inherit;font-size:16px;color:var(--ink);
+      transition:background .15s ease;
+      white-space:nowrap;
+    }
+    .ddi-btn:hover{background:#eceef2}
+    .flag{
+      width:28px;height:20px;border-radius:4px;object-fit:cover;flex:0 0 auto;
+      box-shadow:0 0 0 1px rgba(15,17,21,.08);display:block;
+    }
+    .ddi-btn .code{font-weight:700;font-size:15px}
+    .ddi-btn .chev{color:var(--muted);margin-left:1px;transition:transform .2s ease}
+    .ddi-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+    .tel input{
+      width:100%;height:100%;border:0;outline:0;background:transparent;
+      font-size:18px;color:var(--ink);padding:0 20px;font-family:inherit;
+    }
+    .tel input::placeholder{color:#aab0ba}
+
+    /* Dropdown de países */
+    .ddi-pop{
+      position:absolute;top:calc(100% + 10px);left:0;z-index:9999;
+      width:340px;max-width:82vw;
+      background:#fff;border:1px solid var(--line);border-radius:18px;
+      box-shadow:0 24px 60px rgba(15,17,21,.18);
+      overflow:hidden;display:none;
+    }
+    .ddi-pop.open{display:block;animation:pop .18s cubic-bezier(.2,.8,.2,1)}
+    @keyframes pop{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+    .ddi-search{padding:12px;position:relative}
+    .ddi-search svg{position:absolute;left:24px;top:50%;transform:translateY(-50%);color:#9aa1ac;pointer-events:none}
+    .ddi-search input{
+      width:100%;height:46px;border:0;background:#f4f5f7;border-radius:12px;
+      padding:0 14px 0 42px;font-size:15px;outline:0;font-family:inherit;color:var(--ink);
+      transition:box-shadow .15s ease;
+    }
+    .ddi-search input:focus{background:#eef0f3}
+    .ddi-list{max-height:300px;overflow-y:auto;padding:6px 8px 8px;scrollbar-width:thin}
+    .ddi-item{
+      display:flex;align-items:center;gap:13px;width:100%;
+      padding:11px 12px;border:0;background:transparent;cursor:pointer;
+      border-radius:12px;font-family:inherit;font-size:15px;text-align:left;color:var(--ink);
+      transition:background .12s ease;
+    }
+    .ddi-item:hover{background:#f4f1e8}
+    .ddi-item.active{background:#f4f1e8}
+    .ddi-item .name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+    .ddi-item .code{color:var(--muted);font-weight:600}
+    .ddi-item.active .code{color:var(--accent)}
+    .ddi-empty{padding:22px;text-align:center;color:var(--muted);font-size:14px}
+
+    /* Radio Sim/Não */
+    .choices{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .choice{position:relative}
+    .choice input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+    .choice label{
+      display:flex;align-items:center;gap:12px;
+      height:60px;padding:0 20px;border:1.5px solid var(--line);border-radius:14px;
+      cursor:pointer;font-size:17px;font-weight:500;color:var(--ink);
+      background:#fff;transition:background .16s ease;
+    }
+    .choice input:hover + label{background:#f6f7f9}
+    .choice .mark{
+      width:22px;height:22px;border-radius:50%;border:2px solid var(--line-strong);
+      display:grid;place-items:center;flex:0 0 auto;transition:border-color .16s ease;
+    }
+    .choice .mark::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--accent);transform:scale(0);transition:transform .16s cubic-bezier(.2,.8,.2,1)}
+    .choice input:checked + label{font-weight:600;background:#fafafa}
+    .choice input:checked + label .mark{border-color:var(--accent)}
+    .choice input:checked + label .mark::after{transform:scale(1)}
+
+    .err{color:#d64545;font-size:13px;display:none}
+    .field.invalid .err{display:block}
+    .field.invalid .input,.field.invalid .tel{border-color:#e7a2a2}
+    .field.invalid .choices .choice label{border-color:#e7a2a2}
+
+    .submit{
+      margin-top:8px;height:64px;border:0;border-radius:var(--radius);cursor:pointer;
+      background:linear-gradient(135deg,#1a1d24,#0f1115);color:#fff;
+      font-size:18px;font-weight:700;font-family:inherit;letter-spacing:.01em;
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      transition:transform .12s ease, box-shadow .2s ease, filter .2s ease;
+      box-shadow:0 12px 30px rgba(15,17,21,.18);
+    }
+    .submit:hover{transform:translateY(-1px);box-shadow:0 16px 38px rgba(15,17,21,.24)}
+    .submit:active{transform:translateY(0)}
+    .submit .arrow{transition:transform .18s ease}
+    .submit:hover .arrow{transform:translateX(4px)}
+
+    .foot{margin-top:22px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* Tela de sucesso */
+    .done{display:none;text-align:center;padding:40px 0;animation:rise .5s both}
+    .done.show{display:block}
+    .done .check{
+      width:88px;height:88px;border-radius:50%;margin:0 auto 24px;
+      background:radial-gradient(120% 120% at 30% 20%,var(--accent-2),var(--accent));
+      display:grid;place-items:center;box-shadow:0 14px 40px rgba(200,162,74,.4);
+      animation:pop2 .5s cubic-bezier(.2,.8,.2,1) both;
+    }
+    @keyframes pop2{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+    .done .check svg{width:44px;height:44px}
+    .done h2{font-size:26px;margin:0 0 8px;letter-spacing:-.02em}
+    .done p{color:var(--muted);font-size:16px;margin:0}
+
+    @media (max-width:480px){
+      .wrap{padding:40px 18px 64px}
+      h1{font-size:25px}
+      :root{--field-h:60px}
+      .input input,.tel input{font-size:17px}
+      .ddi-btn .code{display:inline}
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+
+  <div class="wrap">
+    <div id="formView">
+      <h1 class="form-title">Faça seu cadastro pra aula<br class="mob-br" /> Ao vivo com a Biteti</h1>
+      <form id="form" novalidate>
+        <!-- Nome -->
+        <div class="field" data-field>
+          <div class="input">
+            <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Nome completo" required />
+          </div>
+          <span class="err">Por favor, informe seu nome.</span>
+        </div>
+
+        <!-- Email -->
+        <div class="field" data-field>
+          <div class="input">
+            <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="E-mail" required />
+          </div>
+          <span class="err">Informe um e-mail válido.</span>
+        </div>
+
+        <!-- Telefone -->
+        <div class="field" data-field>
+          <div class="tel">
+            <div class="ddi">
+              <button type="button" class="ddi-btn" id="ddiBtn" aria-haspopup="listbox" aria-expanded="false">
+                <img class="flag" id="ddiFlag" src="https://flagcdn.com/br.svg" alt="" />
+                <span class="code" id="ddiCode">+55</span>
+                <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="ddi-pop" id="ddiPop" role="dialog" aria-label="Selecionar país">
+                <div class="ddi-search">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                  <input type="text" id="ddiSearch" placeholder="Buscar país ou código..." autocomplete="off" />
+                </div>
+                <div class="ddi-list" id="ddiList" role="listbox"></div>
+              </div>
+            </div>
+            <input id="telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required />
+          </div>
+          <span class="err">Informe um telefone válido.</span>
+        </div>
+
+        <!-- Aluna Power Academy -->
+        <div class="field" data-field data-radio>
+          <label class="q">Você é aluna da Power Academy?</label>
+          <div class="choices">
+            <div class="choice">
+              <input type="radio" id="aluna-sim" name="aluna" value="Sim" required />
+              <label for="aluna-sim"><span class="mark"></span>Sim</label>
+            </div>
+            <div class="choice">
+              <input type="radio" id="aluna-nao" name="aluna" value="Não" />
+              <label for="aluna-nao"><span class="mark"></span>Não</label>
+            </div>
+          </div>
+          <span class="err">Selecione uma opção.</span>
+        </div>
+
+        <button class="submit" type="submit">
+          Enviar inscrição
+          <span class="arrow">→</span>
+        </button>
+      </form>
+
+    </div>
+
+    <!-- Sucesso -->
+    <div class="done" id="done">
+      <div class="check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1400" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6 9 17l-5-5"/>
+        </svg>
+      </div>
+      <h2>Inscrição enviada! 🎉</h2>
+      <p id="doneMsg">Obrigado! Recebemos seus dados com sucesso.</p>
+    </div>
+  </div>
+
+  <script>
+    /* ===== Lista de países (bandeira, nome PT, DDI, ISO) ===== */
+    const COUNTRIES = [
+      ["🇧🇷","Brasil","+55","BR"],["🇵🇹","Portugal","+351","PT"],["🇺🇸","Estados Unidos","+1","US"],
+      ["🇦🇴","Angola","+244","AO"],["🇲🇿","Moçambique","+258","MZ"],["🇨🇻","Cabo Verde","+238","CV"],
+      ["🇦🇷","Argentina","+54","AR"],["🇺🇾","Uruguai","+598","UY"],["🇵🇾","Paraguai","+595","PY"],
+      ["🇨🇱","Chile","+56","CL"],["🇧🇴","Bolívia","+591","BO"],["🇵🇪","Peru","+51","PE"],
+      ["🇨🇴","Colômbia","+57","CO"],["🇻🇪","Venezuela","+58","VE"],["🇪🇨","Equador","+593","EC"],
+      ["🇲🇽","México","+52","MX"],["🇨🇦","Canadá","+1","CA"],["🇪🇸","Espanha","+34","ES"],
+      ["🇫🇷","França","+33","FR"],["🇮🇹","Itália","+39","IT"],["🇩🇪","Alemanha","+49","DE"],
+      ["🇬🇧","Reino Unido","+44","GB"],["🇮🇪","Irlanda","+353","IE"],["🇳🇱","Países Baixos","+31","NL"],
+      ["🇧🇪","Bélgica","+32","BE"],["🇨🇭","Suíça","+41","CH"],["🇦🇹","Áustria","+43","AT"],
+      ["🇸🇪","Suécia","+46","SE"],["🇳🇴","Noruega","+47","NO"],["🇩🇰","Dinamarca","+45","DK"],
+      ["🇫🇮","Finlândia","+358","FI"],["🇵🇱","Polônia","+48","PL"],["🇨🇿","República Tcheca","+420","CZ"],
+      ["🇬🇷","Grécia","+30","GR"],["🇷🇺","Rússia","+7","RU"],["🇺🇦","Ucrânia","+380","UA"],
+      ["🇷🇴","Romênia","+40","RO"],["🇭🇺","Hungria","+36","HU"],["🇹🇷","Turquia","+90","TR"],
+      ["🇨🇳","China","+86","CN"],["🇯🇵","Japão","+81","JP"],["🇰🇷","Coreia do Sul","+82","KR"],
+      ["🇮🇳","Índia","+91","IN"],["🇮🇩","Indonésia","+62","ID"],["🇹🇭","Tailândia","+66","TH"],
+      ["🇻🇳","Vietnã","+84","VN"],["🇵🇭","Filipinas","+63","PH"],["🇲🇾","Malásia","+60","MY"],
+      ["🇸🇬","Singapura","+65","SG"],["🇦🇺","Austrália","+61","AU"],["🇳🇿","Nova Zelândia","+64","NZ"],
+      ["🇿🇦","África do Sul","+27","ZA"],["🇳🇬","Nigéria","+234","NG"],["🇬🇭","Gana","+233","GH"],
+      ["🇰🇪","Quênia","+254","KE"],["🇪🇬","Egito","+20","EG"],["🇲🇦","Marrocos","+212","MA"],
+      ["🇩🇿","Argélia","+213","DZ"],["🇹🇳","Tunísia","+216","TN"],["🇸🇦","Arábia Saudita","+966","SA"],
+      ["🇦🇪","Emirados Árabes","+971","AE"],["🇮🇱","Israel","+972","IL"],["🇶🇦","Catar","+974","QA"],
+      ["🇱🇧","Líbano","+961","LB"],["🇵🇰","Paquistão","+92","PK"],["🇧🇩","Bangladesh","+880","BD"],
+      ["🇱🇰","Sri Lanka","+94","LK"],["🇮🇷","Irã","+98","IR"],["🇮🇶","Iraque","+964","IQ"],
+      ["🇰🇼","Kuwait","+965","KW"],["🇴🇲","Omã","+968","OM"],["🇯🇴","Jordânia","+962","JO"],
+      ["🇸🇾","Síria","+963","SY"],["🇾🇪","Iêmen","+967","YE"],["🇦🇫","Afeganistão","+93","AF"],
+      ["🇵🇷","Porto Rico","+1","PR"],["🇩🇴","Rep. Dominicana","+1","DO"],["🇨🇺","Cuba","+53","CU"],
+      ["🇬🇹","Guatemala","+502","GT"],["🇸🇻","El Salvador","+503","SV"],["🇭🇳","Honduras","+504","HN"],
+      ["🇳🇮","Nicarágua","+505","NI"],["🇨🇷","Costa Rica","+506","CR"],["🇵🇦","Panamá","+507","PA"],
+      ["🇯🇲","Jamaica","+1","JM"],["🇹🇹","Trinidad e Tobago","+1","TT"],["🇧🇸","Bahamas","+1","BS"],
+      ["🇧🇧","Barbados","+1","BB"],["🇬🇾","Guiana","+592","GY"],["🇸🇷","Suriname","+597","SR"],
+      ["🇵🇹","Timor-Leste","+670","TL"],["🇬🇼","Guiné-Bissau","+245","GW"],["🇸🇹","São Tomé e Príncipe","+239","ST"],
+      ["🇬🇶","Guiné Equatorial","+240","GQ"],["🇬🇦","Gabão","+241","GA"],["🇨🇬","Congo","+242","CG"],
+      ["🇨🇩","Rep. Dem. Congo","+243","CD"],["🇨🇲","Camarões","+237","CM"],["🇨🇮","Costa do Marfim","+225","CI"],
+      ["🇸🇳","Senegal","+221","SN"],["🇲🇱","Mali","+223","ML"],["🇧🇫","Burkina Faso","+226","BF"],
+      ["🇳🇪","Níger","+227","NE"],["🇹🇬","Togo","+228","TG"],["🇧🇯","Benim","+229","BJ"],
+      ["🇹🇩","Chade","+235","TD"],["🇷🇼","Ruanda","+250","RW"],["🇹🇿","Tanzânia","+255","TZ"],
+      ["🇺🇬","Uganda","+256","UG"],["🇿🇲","Zâmbia","+260","ZM"],["🇿🇼","Zimbábue","+263","ZW"],
+      ["🇧🇼","Botsuana","+267","BW"],["🇳🇦","Namíbia","+264","NA"],["🇪🇹","Etiópia","+251","ET"],
+      ["🇸🇩","Sudão","+249","SD"],["🇱🇾","Líbia","+218","LY"],["🇲🇬","Madagascar","+261","MG"],
+      ["🇲🇺","Maurício","+230","MU"],["🇵🇹","Andorra","+376","AD"],["🇱🇺","Luxemburgo","+352","LU"],
+      ["🇮🇸","Islândia","+354","IS"],["🇲🇹","Malta","+356","MT"],["🇨🇾","Chipre","+357","CY"],
+      ["🇭🇷","Croácia","+385","HR"],["🇷🇸","Sérvia","+381","RS"],["🇸🇮","Eslovênia","+386","SI"],
+      ["🇸🇰","Eslováquia","+421","SK"],["🇧🇬","Bulgária","+359","BG"],["🇱🇹","Lituânia","+370","LT"],
+      ["🇱🇻","Letônia","+371","LV"],["🇪🇪","Estônia","+372","EE"],["🇧🇦","Bósnia","+387","BA"],
+      ["🇦🇱","Albânia","+355","AL"],["🇲🇰","Macedônia do Norte","+389","MK"],["🇲🇩","Moldávia","+373","MD"],
+      ["🇬🇪","Geórgia","+995","GE"],["🇦🇲","Armênia","+374","AM"],["🇦🇿","Azerbaijão","+994","AZ"],
+      ["🇰🇿","Cazaquistão","+7","KZ"],["🇺🇿","Uzbequistão","+998","UZ"],["🇳🇵","Nepal","+977","NP"],
+      ["🇲🇲","Mianmar","+95","MM"],["🇰🇭","Camboja","+855","KH"],["🇱🇦","Laos","+856","LA"],
+      ["🇲🇳","Mongólia","+976","MN"],["🇭🇰","Hong Kong","+852","HK"],["🇹🇼","Taiwan","+886","TW"],
+      ["🇲🇴","Macau","+853","MO"],["🇫🇯","Fiji","+679","FJ"],["🇲🇻","Maldivas","+960","MV"]
+    ];
+
+    /* ===== Dropdown DDI ===== */
+    const ddiBtn=document.getElementById("ddiBtn");
+    const ddiPop=document.getElementById("ddiPop");
+    const ddiList=document.getElementById("ddiList");
+    const ddiSearch=document.getElementById("ddiSearch");
+    const ddiFlag=document.getElementById("ddiFlag");
+    const ddiCode=document.getElementById("ddiCode");
+    let selected=COUNTRIES[0];
+
+    function norm(s){return s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();}
+    function flagSrc(iso){return "https://flagcdn.com/"+iso.toLowerCase()+".svg";}
+
+    function renderList(filter=""){
+      const f=norm(filter);
+      const items=COUNTRIES.filter(c=>norm(c[1]).includes(f)||c[2].includes(f)||norm(c[3]).includes(f));
+      ddiList.innerHTML="";
+      if(!items.length){ddiList.innerHTML='<div class="ddi-empty">Nenhum país encontrado</div>';return;}
+      items.forEach(c=>{
+        const b=document.createElement("button");
+        b.type="button";b.className="ddi-item"+(c[3]===selected[3]?" active":"");
+        b.setAttribute("role","option");
+        b.innerHTML=`<img class="flag" src="${flagSrc(c[3])}" alt="" loading="lazy"><span class="name">${c[1]}</span><span class="code">${c[2]}</span>`;
+        b.addEventListener("click",()=>{choose(c);});
+        ddiList.appendChild(b);
+      });
+    }
+    function choose(c){
+      selected=c;
+      ddiFlag.src=flagSrc(c[3]);
+      ddiCode.textContent=c[2];
+      closePop();
+      document.getElementById("telefone").focus();
+    }
+    const telField=ddiBtn.closest(".field");
+    function openPop(){
+      ddiPop.classList.add("open");ddiBtn.setAttribute("aria-expanded","true");
+      telField.classList.add("ddi-open");
+      ddiSearch.value="";renderList();setTimeout(()=>ddiSearch.focus(),20);
+    }
+    function closePop(){ddiPop.classList.remove("open");ddiBtn.setAttribute("aria-expanded","false");telField.classList.remove("ddi-open");}
+    ddiBtn.addEventListener("click",e=>{e.stopPropagation();ddiPop.classList.contains("open")?closePop():openPop();});
+    ddiSearch.addEventListener("input",e=>renderList(e.target.value));
+    ddiSearch.addEventListener("keydown",e=>{if(e.key==="Escape")closePop();});
+    document.addEventListener("click",e=>{if(!ddiPop.contains(e.target)&&e.target!==ddiBtn&&!ddiBtn.contains(e.target))closePop();});
+    renderList();
+
+    /* ===== Validação + progresso ===== */
+    const form=document.getElementById("form");
+    const fields=[...document.querySelectorAll("[data-field]")];
+    const progress=document.getElementById("progress");
+
+    function isEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
+    function fieldValid(f){
+      if(f.hasAttribute("data-radio")) return !!f.querySelector("input:checked");
+      const telInp=f.querySelector("input[type=tel]");
+      if(telInp) return telInp.value.replace(/\D/g,"").length>=8;
+      const emailInp=f.querySelector("input[type=email]");
+      if(emailInp) return isEmail(emailInp.value.trim());
+      const inp=f.querySelector(".input input,.tel input");
+      if(!inp) return true;
+      return inp.value.trim().length>=2;
+    }
+    function updateProgress(){
+      const done=fields.filter(fieldValid).length;
+      progress.style.width=(done/fields.length*100)+"%";
+    }
+    form.addEventListener("input",()=>{
+      updateProgress();
+      fields.forEach(f=>{if(f.classList.contains("invalid")&&fieldValid(f))f.classList.remove("invalid");});
+    });
+    form.addEventListener("change",updateProgress);
+
+    /* Máscara simples de telefone (BR e genérica) */
+    const tel=document.getElementById("telefone");
+    tel.addEventListener("input",()=>{
+      let d=tel.value.replace(/\D/g,"");
+      if(selected[3]==="BR"){
+        d=d.slice(0,11);
+        if(d.length>10) tel.value=d.replace(/(\d{2})(\d{5})(\d{0,4})/,"($1) $2-$3").trim();
+        else if(d.length>6) tel.value=d.replace(/(\d{2})(\d{4})(\d{0,4})/,"($1) $2-$3").trim();
+        else if(d.length>2) tel.value=d.replace(/(\d{2})(\d{0,5})/,"($1) $2").trim();
+        else tel.value=d;
+      }else{
+        tel.value=d.slice(0,15);
+      }
+    });
+
+    /* Submit */
+    form.addEventListener("submit",e=>{
+      e.preventDefault();
+      let ok=true,first=null;
+      fields.forEach(f=>{
+        if(fieldValid(f)){f.classList.remove("invalid");}
+        else{f.classList.add("invalid");ok=false;if(!first)first=f;}
+      });
+      if(!ok){first.scrollIntoView({behavior:"smooth",block:"center"});
+        const i=first.querySelector("input");if(i)i.focus({preventScroll:true});return;}
+
+      const nome=document.getElementById("nome").value.trim();
+      const aluna=form.querySelector("input[name=aluna]:checked").value;
+      const phone=selected[2]+" "+tel.value.trim();
+
+      // Payload enviado ao webhook
+      const payload={
+        nome:nome,
+        email:document.getElementById("email").value.trim(),
+        phone:phone,
+        "1a7c567f-bc92-492c-bf30-5eb217ee3c1e":aluna
+      };
+
+      const WEBHOOK_URL="http://localhost:8080/api/webhook?sub_origin_id=0c98025d-45e0-4f93-8020-4c8ad35a1f01&pipeline_id=103fa1db-857e-491d-b8bf-14a0f5c00ee0";
+
+      // Feedback visual no botão enquanto envia
+      const btn=form.querySelector(".submit");
+      btn.disabled=true;btn.style.opacity=".7";
+      btn.innerHTML='Enviando... <span class="arrow">→</span>';
+
+      fetch(WEBHOOK_URL,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+      })
+      .then(r=>console.log("Webhook status:",r.status))
+      .catch(err=>console.error("Erro ao enviar webhook:",err))
+      .finally(()=>{
+        console.log("Payload enviado:",payload);
+        progress.style.width="100%";
+        document.getElementById("formView").style.display="none";
+        const done=document.getElementById("done");
+        done.classList.add("show");
+        document.getElementById("doneMsg").textContent=
+          `Obrigado, ${nome.split(" ")[0]}! Recebemos seus dados com sucesso.`;
+        window.scrollTo({top:0,behavior:"smooth"});
+      });
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>
