@@ -101,8 +101,8 @@
       font-size:18px;color:var(--ink);padding:0 20px;font-family:inherit;
     }
     .input input::placeholder{color:#aab0ba}
-    .input:hover,.tel:hover{box-shadow:inset 0 0 0 1.5px var(--line-strong)}
-    .input:focus-within,.tel:focus-within{box-shadow:inset 0 0 0 2px var(--ink)}
+    .input:hover,.tel:hover{box-shadow:inset 0 0 0 1.5px var(--line)}
+    .input:focus-within,.tel:focus-within{box-shadow:inset 0 0 0 2px var(--line-strong)}
 
     /* Telefone com DDI */
     .tel{padding-left:6px}
@@ -219,7 +219,7 @@
     .done p{color:var(--muted);font-size:16px;margin:0}
 
     @media (max-width:480px){
-      .wrap{padding:40px 18px 64px}
+      .wrap{padding:0 1.4em}
       h1{font-size:25px}
       :root{--field-h:60px}
       .input input,.tel input{font-size:17px}
