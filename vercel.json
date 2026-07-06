@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://io.scalebeauty.com.br/api/:path*"
+      "destination": "https://app.biteti.co/api/:path*"
     }
   ]
 }
