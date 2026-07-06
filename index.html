@@ -485,14 +485,18 @@
       const body=JSON.stringify(payload);
       console.log("Enviando payload:",payload);
 
+      const REDIRECT_URL="https://us06web.zoom.us/j/89725916842?pwd=1VNBYN2eX1GCYPPpfchDqblAJHKDdP.1";
+
       function showSuccess(){
         progress.style.width="100%";
         document.getElementById("formView").style.display="none";
         const done=document.getElementById("done");
         done.classList.add("show");
         document.getElementById("doneMsg").textContent=
-          `Obrigado, ${nome.split(" ")[0]}! Recebemos seus dados com sucesso.`;
+          `Obrigado, ${nome.split(" ")[0]}! Redirecionando para a aula...`;
         window.scrollTo({top:0,behavior:"smooth"});
+        // redireciona para a sala do Zoom após 2s
+        setTimeout(function(){ window.location.href=REDIRECT_URL; },2000);
       }
 
       fetch(WEBHOOK_URL,{
