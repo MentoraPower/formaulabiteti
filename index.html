@@ -44,6 +44,15 @@
       margin:0 auto;
       padding:0 2em;
     }
+    .card{
+      background:#fff;
+      border:1px solid #00000012;
+      border-radius:24px;
+      padding:40px 36px;
+    }
+    @media (max-width:480px){
+      .card{padding:28px 20px;border-radius:20px}
+    }
     /* Progress */
     .progress{
       position:fixed;top:0;left:0;height:4px;width:0%;
@@ -231,6 +240,7 @@
   <div class="progress" id="progress"></div>
 
   <div class="wrap">
+   <div class="card">
     <div id="formView">
       <h1 class="form-title">Faça seu cadastro pra aula<br class="mob-br" /> Ao vivo com a Biteti</h1>
       <form id="form" novalidate>
@@ -306,6 +316,7 @@
       <h2>Inscrição enviada! 🎉</h2>
       <p id="doneMsg">Obrigado! Recebemos seus dados com sucesso.</p>
     </div>
+   </div>
   </div>
 
   <script>
