@@ -42,7 +42,7 @@
       width:100%;
       max-width:var(--maxw);
       margin:0 auto;
-      padding:0 24px;
+      padding:0 1.4em;
     }
     /* Progress */
     .progress{
@@ -67,8 +67,9 @@
     h1{font-size:30px;line-height:1.15;letter-spacing:-.02em;margin:0 0 10px}
     .form-title{font-size:25px;line-height:1.25;letter-spacing:-.02em;margin:0 0 34px;text-align:center;font-weight:700;white-space:nowrap}
     .form-title .mob-br{display:none}
-    @media (max-width:480px){
-      .form-title{font-size:25px;margin-bottom:28px;white-space:normal}
+    /* abaixo de 600px o titulo quebra em 2 linhas (evita estouro lateral) */
+    @media (max-width:600px){
+      .form-title{font-size:24px;margin-bottom:28px;white-space:normal}
       .form-title .mob-br{display:inline}
     }
     .sub{color:var(--muted);font-size:16px;margin:0 0 36px}
@@ -100,6 +101,8 @@
       font-size:18px;color:var(--ink);padding:0 20px;font-family:inherit;
     }
     .input input::placeholder{color:#aab0ba}
+    .input:hover,.tel:hover{box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+    .input:focus-within,.tel:focus-within{box-shadow:inset 0 0 0 2px var(--ink)}
 
     /* Telefone com DDI */
     .tel{padding-left:6px}
@@ -142,7 +145,7 @@
     .ddi-search svg{position:absolute;left:24px;top:50%;transform:translateY(-50%);color:#9aa1ac;pointer-events:none}
     .ddi-search input{
       width:100%;height:46px;border:0;background:#f4f5f7;border-radius:12px;
-      padding:0 14px 0 42px;font-size:15px;outline:0;font-family:inherit;color:var(--ink);
+      padding:0 14px 0 42px;font-size:16px;outline:0;font-family:inherit;color:var(--ink);
       transition:box-shadow .15s ease;
     }
     .ddi-search input:focus{background:#eef0f3}
