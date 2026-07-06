@@ -207,7 +207,7 @@
     .done .check{
       width:88px;height:88px;border-radius:50%;margin:0 auto 24px;
       background:radial-gradient(120% 120% at 30% 20%,var(--accent-2),var(--accent));
-      display:grid;place-items:center;box-shadow:0 14px 40px rgba(200,162,74,.4);
+      display:grid;place-items:center;
       animation:pop2 .5s cubic-bezier(.2,.8,.2,1) both;
     }
     @keyframes pop2{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
@@ -470,22 +470,19 @@
         "1a7c567f-bc92-492c-bf30-5eb217ee3c1e":aluna
       };
 
-      const WEBHOOK_URL="http://localhost:8080/api/webhook?sub_origin_id=0c98025d-45e0-4f93-8020-4c8ad35a1f01&pipeline_id=103fa1db-857e-491d-b8bf-14a0f5c00ee0";
+      // URL relativa: a Vercel faz proxy de /api/* -> https://io.scalebeauty.com.br/api/* (ver vercel.json)
+      // Mesma origem = sem CORS.
+      const WEBHOOK_URL="/api/webhook?sub_origin_id=0c98025d-45e0-4f93-8020-4c8ad35a1f01&pipeline_id=103fa1db-857e-491d-b8bf-14a0f5c00ee0";
 
       // Feedback visual no botão enquanto envia
       const btn=form.querySelector(".submit");
       btn.disabled=true;btn.style.opacity=".7";
       btn.innerHTML='Enviando... <span class="arrow">→</span>';
 
-      fetch(WEBHOOK_URL,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(payload)
-      })
-      .then(r=>console.log("Webhook status:",r.status))
-      .catch(err=>console.error("Erro ao enviar webhook:",err))
-      .finally(()=>{
-        console.log("Payload enviado:",payload);
+      const body=JSON.stringify(payload);
+      console.log("Enviando payload:",payload);
+
+      function showSuccess(){
         progress.style.width="100%";
         document.getElementById("formView").style.display="none";
         const done=document.getElementById("done");
@@ -493,7 +490,17 @@
         document.getElementById("doneMsg").textContent=
           `Obrigado, ${nome.split(" ")[0]}! Recebemos seus dados com sucesso.`;
         window.scrollTo({top:0,behavior:"smooth"});
-      });
+      }
+
+      fetch(WEBHOOK_URL,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:body,
+        keepalive:true
+      })
+      .then(r=>console.log("Webhook status:",r.status))
+      .catch(err=>console.error("Falha ao enviar webhook:",err))
+      .finally(showSuccess);
     });
 
     updateProgress();
